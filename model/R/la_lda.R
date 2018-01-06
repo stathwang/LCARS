@@ -121,3 +121,4 @@ theta1 <- t(scale(t(theta), center = FALSE, scale = colSums(t(theta))))
 phi1 <- scale(phi, center = FALSE, scale = colSums(phi))
 rho1 <- scale(rho, center = FALSE, scale = colSums(rho))
 lambda1 <- t(scale(t(lambda), center = FALSE, scale = colSums(t(lambda))))
+
