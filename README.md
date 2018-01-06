@@ -23,7 +23,7 @@ The `model` folder contains 2 different folders, `R` and `python`, each of which
   - `lda.R (lda.py)`: Each user is a document and events (spatial items) visited by a user are the words in the document. The model ignores both location and content words of events and shows similar performance to user-based collaborative filtering. Each user is represented as a distribution over latent topics where a latent topic itself is a distribution over spatial items.
   - `ca_lda.R (ca_lda.py)`: This is the *content* component of the LCA-LDA model. It only considers the content words of a spatial item and ignores the location.
   - `la_lda.R`: This is the *location* component of the LDA-LDA model. It only considers the location of each spatial item, not the content words.
-  - `lca_lda.R`: The final LCARS model that combines `CA-LDA.py` and `LA-LDA.py` taking into account both location and content words of each spatial item.
+  - `lca_lda.R`: The final LCARS model that combines `ca_lda.R` and `la_lda.R` taking into account both location and content words of each spatial item.
 
 ### Methods
 The paper uses **collapsed Gibbs sampling** by only keeping track of coin flips and topic assignments for every record of a user checkin history. For the hyperparameter settings, see the paper.
