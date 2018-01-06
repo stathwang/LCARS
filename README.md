@@ -11,7 +11,7 @@ Foursquare dataset is too large, so I'll have to truncate it before uploading. O
 2. User checkin histories are locally clustered, so the traditional collaborative filtering methods would produce poor recommendations.
 3. Data sparsity: User activites are very limited in distant locations.
 
-### Main Idea
+### Main Ideas
 To produce a personalized spatial item recommendation, LCARS combines the querying user's interest and the local preference of the querying city, each of which is a distribution over latent topics where a latent topic is a distribution over spatial items and content words. The model assumes that items and their content words are independently conditioned on the topics. It learns topics that capture both item co-occurrence and content co-occurrence patterns.
 
 Specifically, LCARS learns:
@@ -24,6 +24,8 @@ The `model` folder contains 2 different folders, `R` and `python`, each of which
   - `ca_lda.R (ca_lda.py)`: This is the *content* component of the LCA-LDA model. It only considers the content words of a spatial item and ignores the location.
   - `la_lda.R`: This is the *location* component of the LDA-LDA model. It only considers the location of each spatial item, not the content words.
   - `lca_lda.R`: The final LCARS model that combines `ca_lda.R` and `la_lda.R` taking into account both location and content words of each spatial item.
+  
+I'll write and upload `la_lda.py` and `lca_lda.py` once I find time.
 
 ### Methods
 The paper uses **collapsed Gibbs sampling** by only keeping track of coin flips and topic assignments for every record of a user checkin history. For the hyperparameter settings, see the paper.
