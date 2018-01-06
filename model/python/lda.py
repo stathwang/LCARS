@@ -15,13 +15,13 @@ class LDARec(object):
         self.testpath = testpath
         self.header = header
         self.ntopics = ntopics
-        self.train = {} 						     # training data: {UserID: [Item1, Item2, Item3, ...]} where duplicate items per user are allowed.
+        self.train = {} 			     # training data: {UserID: [Item1, Item2, Item3, ...]} where duplicate items per user are allowed.
         self.test = {}                   # test data: same format as self.train
-        self.user2idx = {}					     # user to index dict: {UserID: UserIndex}
-        self.item2idx = {}					     # item to index dict: {ItemID: ItemIndex}
+        self.user2idx = {}			     # user to index dict: {UserID: UserIndex}
+        self.item2idx = {}				 # item to index dict: {ItemID: ItemIndex}
         self.idx2item = {}               # index to item dict: {ItemIndex: ItemID}
-        self.nusers = 0						       # initialize number of training users
-        self.nitems = 0						       # initialize number of training items
+        self.nusers = 0					 # initialize number of training users
+        self.nitems = 0					 # initialize number of training items
         self.test_rowcount = 0
         
         self.recall = {}
