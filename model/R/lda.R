@@ -82,26 +82,3 @@ cat(stoptime - starttime)
 # normalize the model parameter matrices
 theta1 <- t(scale(t(theta), center = FALSE, scale = colSums(t(theta))))
 phi1 <- scale(phi, center = FALSE, scale = colSums(phi))
-
-# user-specific topic proportion
-# rowSums(theta) == 1 for every document
-# dim(theta): 200 users x 25 topics
-theta <- (dt + alpha) / rowSums(dt + alpha)
-barplot(theta[5,], names.arg = paste0('topic', 1:25)) # topic proportion for the 10th topic
-
-# topic distribution over a fixed event set
-# same as: phi <- (wt + eta) / (nk + length(vocab) * eta)
-# dim(phi): 838 event ids x 25 topics
-# phi <- (wt + eta) / colSums(wt + eta)
-# rownames(phi) <- vocab
-phi <- round(phi, 3)
-barplot(phi[,1], names.arg = paste0('event', 1:838))
-
-# return top 10 topical words
-# words per topic shown with the probabilities from highest to lowest
-topical <- apply(phi, 2, function(x) names(sort(x, decreasing = TRUE)[1:10]))
-
-# match events to event locations and categories
-# we see more consistency in event locations across topics
-apply(topical, 2, function(x) f[event_id %in% x, event_location])
-apply(topical, 2, function(x) f[event_id %in% x, event_category])
