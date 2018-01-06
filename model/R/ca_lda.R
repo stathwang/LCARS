@@ -84,3 +84,4 @@ cat(stoptime - starttime) # 3.25 minutes
 theta1 <- t(scale(t(theta), center = FALSE, scale = colSums(t(theta))))
 phi1 <- scale(phi, center = FALSE, scale = colSums(phi))
 nu1 <- scale(nu, center = FALSE, scale = colSums(nu))
+
