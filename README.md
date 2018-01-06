@@ -1,10 +1,10 @@
 # LCARS: A Spatial Item Recommender System
 
-This repository contains my implementation of LCARS (Location-Content-Aware Recommender System) for spatial item recommendation. Please refer to the following paper for details.
+This repository contains my implementation of LCARS (Location-Content-Aware Recommender System) for spatial item recommendation in R and Python. Please refer to the following paper for details.
 
 Paper: [LCARS: A Spatial Item Recommender System](http://net.pku.edu.cn/~cuibin/Papers/2014%20TOIS%20-%20lcars.pdf)
 
-Foursquare data is too large, so I'll have to truncate it before uploading. Only the truncated version of DoubanEvent data is uploaded to the `data` folder.
+Foursquare dataset is too large, so I'll have to truncate it before uploading. Only the truncated version of DoubanEvent data is uploaded to the `data` folder.
 
 ### Problems
 1. Cold-start users and cities: How can we recommend spatial items to a new user traveling to a new city?
