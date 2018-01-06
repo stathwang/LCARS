@@ -19,7 +19,7 @@ Specifically, LCARS learns:
    - intrinsic **user interest** distribution over topics
    - **local preference** in a given region over topics
 
-The `model` folder contains 2 different folders (R and python), each of which contains the following:
+The `model` folder contains 2 different folders (`R` and `python`), each of which contains the following:
   - `lda.R (lda.py)`: Each user is a document and events (spatial items) visited by a user are the words in the document. The model ignores both location and content words of events and shows similar performance to user-based collaborative filtering. Each user is represented as a distribution over latent topics where a latent topic itself is a distribution over spatial items.
   - `ca_lda.R (ca_lda.py)`: This is the *content* component of the LCA-LDA model. It only considers the content words of a spatial item and ignores the location.
   - `la_lda.R`: This is the *location* component of the LDA-LDA model. It only considers the location of each spatial item, not the content words.
