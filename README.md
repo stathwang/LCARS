@@ -14,6 +14,8 @@ Foursquare dataset is too large, so I'll have to truncate it before uploading. O
 ### Main Ideas
 To produce a personalized spatial item recommendation, LCARS combines the querying user's interest and the local preference of the querying city, each of which is a distribution over latent topics where a latent topic is a distribution over spatial items and content words. The model assumes that items and their content words are independently conditioned on the topics. It learns topics that capture both item co-occurrence and content co-occurrence patterns.
 
+![LCARS](/img/lcars_model.png)
+
 Specifically, LCARS learns:
    - latent **topic** distribution over spatial items and that over content words
    - intrinsic **user interest** distribution over topics
