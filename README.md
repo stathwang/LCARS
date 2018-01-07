@@ -2,7 +2,7 @@
 
 This repository contains my implementation of LCARS (Location-Content-Aware Recommender System) for spatial item recommendation in R and Python. Please refer to the following paper for details.
 
-Paper: [LCARS: A Spatial Item Recommender System](http://net.pku.edu.cn/~cuibin/Papers/2014%20TOIS%20-%20lcars.pdf)
+Paper: [LCARS: A Spatial Item Recommender System](http://net.pku.edu.cn/~cuibin/Papers/2014%20TOIS%20-%20lcars.pdf) (Yin et al. 2014)
 
 Foursquare dataset is too large, so I'll have to truncate it before uploading. Only the truncated version of DoubanEvent data is uploaded to the `data` folder.
 
