@@ -8,8 +8,7 @@ rm(list = ls())
 
 options(scipen = 8)
 
-# each user is viewed as a document
-# spatial items visited by a user are viewed as the words in a document
+# Each user is viewed as a document and spatial items visited by a user are viewed as the words in a document
 # dat <- train[, .(user_id, event_id)]
 dat <- train[, .(user_id, event_id, event_location, event_category, user_location)]
 vocab <- unique(dat$event_id)
@@ -18,8 +17,8 @@ dat$uid <- match(dat$user_id, users)
 dat$vid <- match(dat$event_id, vocab)
 docs <- llply(unique(dat$uid), function(x) dat[uid == x, vid])
 
-# initialize the parameters
-# increase niters to > 25000 during the actual model fitting
+# Initialize the hyperparameters
+# Increase niters to > 25000 during the actual model fitting
 K <- 25
 alpha <- 25/K
 eta <- 0.01
@@ -27,7 +26,7 @@ niters <- 12000
 burnin <- 2000
 thin <- 1
 
-# initialize the topics
+# Initialize the topics
 # nk <- colSums(wt)
 wt <- matrix(0, length(vocab), K)
 dt <- matrix(0, length(docs), K)
@@ -44,11 +43,11 @@ for (d in 1:length(docs)) {
   }
 }
 
-# model parameter matrices
+# Initialize the model parameter matrices
 theta <- matrix(0, length(users), K)
 phi <- matrix(0, length(vocab), K)
 
-# collapsed gibbs sampling
+# Collapsed gibbs sampling starts here...
 starttime <- Sys.time()
 for (i in 1:niters) {
   for (d in 1:length(docs)) {
@@ -66,8 +65,8 @@ for (i in 1:niters) {
       nk[tnew] <- nk[tnew] + 1
       # if (t0 != tnew) cat(paste0('user:', users[d], ' token:', w, ' word:', vocab[w], ' topic:', t0, ' => ', tnew, '\n'))
       
-      # update model parameters
-      # later iterations get more weight
+      # Update the model parameter matrices
+      # Later iterations get more weight
       if (i > burnin & i %% thin == 0) {
         inv_wgt <- thin / (i - burnin)
         theta[d, tnew] <- theta[d, tnew] + inv_wgt * (dt[d, tnew] + alpha) / sum(dt[d,] + alpha)
@@ -79,6 +78,6 @@ for (i in 1:niters) {
 stoptime <- Sys.time()
 cat(stoptime - starttime)
 
-# normalize the model parameter matrices
+# Normalize the model parameter matrices
 theta1 <- t(scale(t(theta), center = FALSE, scale = colSums(t(theta))))
 phi1 <- scale(phi, center = FALSE, scale = colSums(phi))
