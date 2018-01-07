@@ -16,7 +16,7 @@ dat$vid <- match(dat$event_id, vocab)
 dat$cid <- match(dat$event_category, cats)
 docs <- dlply(dat[,.(uid, vid, cid)], .(uid), function(x) alply(x, 1, function(y) as.numeric(y)[-1]))
 
-# Initialize parameters
+# Initialize the hyperparameters
 K <- 150
 alpha <- 50/K
 beta <- betap <- 0.01
