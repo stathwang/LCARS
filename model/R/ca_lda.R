@@ -5,8 +5,7 @@ library(ggplot2)
 
 # Content-Aware Latent-Dirichlet-Allocation for Spatial Item Recommendation
 
-# each user is viewed as a document
-# spatial items visited by the user are viewed as the words in the document
+# Each user is viewed as a document and spatial items visited by a user are viewed as the words in a document
 # dat <- train[, .(user_id, event_id, event_category)]
 dat <- train[, .(user_id, event_id, event_location, event_category, user_location)]
 vocab <- unique(dat$event_id)
@@ -17,7 +16,7 @@ dat$vid <- match(dat$event_id, vocab)
 dat$cid <- match(dat$event_category, cats)
 docs <- dlply(dat[,.(uid, vid, cid)], .(uid), function(x) alply(x, 1, function(y) as.numeric(y)[-1]))
 
-# initialize parameters
+# Initialize parameters
 K <- 150
 alpha <- 50/K
 beta <- betap <- 0.01
@@ -25,7 +24,7 @@ niters <- 600
 burnin <- 100
 thin <- 1
 
-# initialize matrices
+# Initialize the matrices
 uk <- matrix(0, length(users), K)
 ck <- matrix(0, length(cats), K)
 vk <- matrix(0, length(vocab), K)
@@ -41,12 +40,12 @@ for (d in 1:length(docs)) {
   }
 }
 
-# model parameter matrices
+# Initialize the model parameter matrices
 theta <- matrix(0, length(users), K)
 phi <- matrix(0, length(vocab), K)
 nu <- matrix(0, length(cats), K)
 
-# collapsed gibbs sampling
+# Collapsed gibbs sampling here
 starttime <- Sys.time()
 for (i in 1:niters) {
   for (d in 1:length(docs)) {
@@ -66,8 +65,8 @@ for (i in 1:niters) {
       ck[tup[2], tnew] <- ck[tup[2], tnew] + 1
       # if (t0 != tnew) cat(paste0('user:', users[d], ' event:', vocab[tup[1]], ' word:', cats[tup[2]], ' topic:', t0, ' => ', tnew, '\n'))
       
-      # update model parameters
-      # later iterations get more weight
+      # Update the model parameter matrics
+      # Later iterations get more weight
       if (i > burnin & i %% thin == 0) {
         inv_wgt <- thin / (i - burnin)
         theta[d, tnew] <- theta[d, tnew] + inv_wgt * (uk[d, tnew] + alpha) / sum(uk[d,] + alpha)
@@ -78,9 +77,9 @@ for (i in 1:niters) {
   }
 }
 stoptime <- Sys.time()
-cat(stoptime - starttime) # 3.25 minutes
+cat(stoptime - starttime)
 
-# normalize the model parameter matrices
+# Normalize the model parameter matrices
 theta1 <- t(scale(t(theta), center = FALSE, scale = colSums(t(theta))))
 phi1 <- scale(phi, center = FALSE, scale = colSums(phi))
 nu1 <- scale(nu, center = FALSE, scale = colSums(nu))
