@@ -3,8 +3,9 @@ library(plyr)
 library(data.table)
 library(ggplot2)
 
-# each user is viewed as a document
-# spatial items visited by the user are viewed as the words in the document
+# Location-Content-Aware Latent-Dirichlet-Allocation for Spatial Item Recommendation
+
+# Each user is viewed as a document and spatial items visited by a user are viewed as the words in a document
 dat <- train
 vocab <- unique(dat$event_id)
 users <- unique(dat$user_id)
@@ -16,7 +17,7 @@ dat$pid <- match(dat$event_location, cities)
 dat$cid <- match(dat$event_category, cats)
 docs <- dlply(dat[,.(uid, vid, pid, cid)], .(uid), function(x) alply(x, 1, function(y) as.numeric(y)[-1]))
 
-# initialize parameters
+# Initialize the hyperparameters
 K <- 50
 alpha <- alphap <- 50/K
 gamma <- gammap <- 0.5
@@ -25,7 +26,7 @@ niters <- 500
 burnin <- 100
 thin <- 1
 
-# initialize matrices
+# Initialize the matrices
 u2 <- matrix(0, length(users), 2)
 uk <- matrix(0, length(users), K)
 pk <- matrix(0, length(cities), K)
@@ -47,14 +48,14 @@ for (d in 1:length(docs)) {
   }
 }
 
-# model parameter matrices
+# Initialize the model parameter matrices
 theta <- matrix(0, length(users), K)
 phi <- matrix(0, length(vocab), K)
 rho <- matrix(0, length(cities), K)
 nu <- matrix(0, length(cats), K)
 lambda <- matrix(0, length(users), 2)
 
-# collapsed gibbs sampling
+# Collapsed gibbs sampling here
 set.seed(67890)
 starttime <- Sys.time()
 for (i in 1:niters) {
@@ -81,7 +82,7 @@ for (i in 1:niters) {
       n2 <- (u2[d, 1] + gammap) / (sum(u2[d,]) + gamma + gammap)
       c0 <- n1 * n2
       
-      # sample a new coin
+      # Sample a new coin
       cnew <- sample(0:1, 1, prob = c(c0, c1))
       cf[[d]][r] <- cnew
       u2[d, cnew + 1] <- u2[d, cnew + 1] + 1
@@ -89,7 +90,7 @@ for (i in 1:niters) {
       vk[tup[1], t0] <- vk[tup[1], t0] - 1
       ck[tup[3], t0] <- ck[tup[3], t0] - 1
       
-      # if s = 1, then update using user matrix
+      # If s = 1, then update using user matrix
       # else if s = 0, update using event location matrix
       if (cnew == 1) {
         multp <- (uk[d,] + alpha) / (sum(uk[d,]) + K * alpha) *
@@ -109,8 +110,8 @@ for (i in 1:niters) {
       ck[tup[3], tnew] <- ck[tup[3], tnew] + 1
       # if (t0 != tnew) cat(paste0('user:', users[d], ' event:', vocab[tup[1]], ' city:', cities[tup[2]], ' topic:', t0, ' => ', tnew, '\n'))
       
-      # update model parameters
-      # later iterations get more weight
+      # Update the model parameter matrics
+      # Later iterations get more weight
       if (i > burnin & i %% thin == 0) {
         inv_wgt <- thin / (i - burnin)
         theta[d, tnew] <- theta[d, tnew] + inv_wgt * (uk[d, tnew] + alpha) / sum(uk[d,] + alpha)
@@ -126,13 +127,14 @@ for (i in 1:niters) {
 stoptime <- Sys.time()
 cat(stoptime - starttime)
 
-# normalize the model parameter matrices
+# Normalize the model parameter matrices
 theta1 <- t(scale(t(theta), center = FALSE, scale = colSums(t(theta))))
 phi1 <- scale(phi, center = FALSE, scale = colSums(phi))
 rho1 <- scale(rho, center = FALSE, scale = colSums(rho))
 nu1 <- scale(nu, center = FALSE, scale = colSums(nu))
 lambda1 <- t(scale(t(lambda), center = FALSE, scale = colSums(t(lambda))))
 
+# Barplot the model outputs
 barplot(theta1[1,], names.arg = paste0('topic', 1:K))
 barplot(phi1[,1], names.arg = paste0('event', 1:length(vocab)))
 barplot(rho1[,1], names.arg = paste0('city', 1:length(cities)))
