@@ -4,7 +4,7 @@ library(data.table)
 library(ggplot2)
 library(pryr)
 
-f <- fread("data/douban_data_trunc.tsv")
+f <- fread("/data/douban_data_trunc.tsv")
 
 # stratified split into train and test
 set.seed(321)
