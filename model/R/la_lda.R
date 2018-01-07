@@ -3,8 +3,9 @@ library(plyr)
 library(data.table)
 library(ggplot2)
 
-# each user is viewed as a document
-# spatial items visited by the user are viewed as the words in the document
+# Location-Aware Latent-Dirichlet-Allocation for Spatial Item Recommendation
+
+# Each user is viewed as a document and spatial items visited by a user are viewed as the words in a document
 # dat <- train[, .(user_id, event_id, event_location)]
 dat <- train[, .(user_id, event_id, event_location, event_category, user_location)]
 vocab <- unique(dat$event_id)
@@ -15,7 +16,7 @@ dat$vid <- match(dat$event_id, vocab)
 dat$pid <- match(dat$event_location, cities)
 docs <- dlply(dat[,.(uid, vid, pid)], .(uid), function(x) alply(x, 1, function(y) as.numeric(y)[-1]))
 
-# initialize parameters
+# Initialize the parameters
 K <- 2
 alpha <- alphap <- 2/K
 gamma <- gammap <- 1
@@ -24,7 +25,7 @@ niters <- 20
 burnin <- 1
 thin <- 1
 
-# initialize matrices
+# Initialize the matrices
 u2 <- matrix(0, length(users), 2)
 uk <- matrix(0, length(users), K)
 pk <- matrix(0, length(cities), K)
@@ -44,13 +45,13 @@ for (d in 1:length(docs)) {
   }
 }
 
-# model parameter matrices
+# Initialize the model parameter matrices
 theta <- matrix(0, length(users), K)
 phi <- matrix(0, length(vocab), K)
 rho <- matrix(0, length(cities), K)
 lambda <- matrix(0, length(users), 2)
 
-# collapsed gibbs sampling
+# Collapsed gibbs sampling here
 starttime <- Sys.time()
 for (i in 1:niters) {
   for (d in 1:length(docs)) {
@@ -83,7 +84,7 @@ for (i in 1:niters) {
       
       vk[tup[1], t0] <- vk[tup[1], t0] - 1
       
-      # if s = 1, then update using user matrix
+      # If s = 1, then update using user matrix
       # else if s = 0, update using event location matrix
       if (cnew == 1) {
         multp <- (uk[d,] + alpha) / (sum(uk[d,]) + K * alpha) *
@@ -100,8 +101,8 @@ for (i in 1:niters) {
       vk[tup[1], tnew] <- vk[tup[1], tnew] + 1
       # if (t0 != tnew) cat(paste0('user:', users[d], ' event:', vocab[tup[1]], ' city:', cities[tup[2]], ' topic:', t0, ' => ', tnew, '\n'))
       
-      # update model parameters
-      # later iterations get more weight
+      # Update the model parameter matrices
+      # Later iterations get more weight
       if (i > burnin & i %% thin == 0) {
         inv_wgt <- thin / (i - burnin)
         theta[d, tnew] <- theta[d, tnew] + inv_wgt * (uk[d, tnew] + alpha) / sum(uk[d,] + alpha)
@@ -114,9 +115,9 @@ for (i in 1:niters) {
   }
 }
 stoptime <- Sys.time()
-cat(stoptime - starttime) # 3.48 minutes
+cat(stoptime - starttime)
 
-# normalize the model parameter matrices
+# Normalize the model parameter matrices
 theta1 <- t(scale(t(theta), center = FALSE, scale = colSums(t(theta))))
 phi1 <- scale(phi, center = FALSE, scale = colSums(phi))
 rho1 <- scale(rho, center = FALSE, scale = colSums(rho))
