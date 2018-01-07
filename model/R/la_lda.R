@@ -16,7 +16,7 @@ dat$vid <- match(dat$event_id, vocab)
 dat$pid <- match(dat$event_location, cities)
 docs <- dlply(dat[,.(uid, vid, pid)], .(uid), function(x) alply(x, 1, function(y) as.numeric(y)[-1]))
 
-# Initialize the parameters
+# Initialize the hyperparameters
 K <- 2
 alpha <- alphap <- 2/K
 gamma <- gammap <- 1
