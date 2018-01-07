@@ -205,7 +205,7 @@ class LDARec(object):
 
 if __name__=='__main__':
     
-    filedir = 'data/'
+    filedir = '/data/'
     trainpath = filedir + 'douban_data_trunc_train.tsv'             # 75% in training set
     testpath = filedir + 'douban_data_trunc_test.tsv'               # 25% in test set
     
