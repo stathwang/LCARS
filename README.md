@@ -38,8 +38,8 @@ Rank the events by sorting the scores in decreasing order. For every threshold *
 
 ### Results
 1. LCA-LDA outperforms all the other models, while LDA show the worst performance. Local preference and item content information are indeed effective.
-2. For the number of latent topics > 25, the increase in recommendation performance is rather small. This prompts to set the number of topics to 25 to balance out the model complexity and computational efficiency.
+2. For the number of latent topics > 25, increases in recommendation performance on this truncated DoubanEvent dataset is rather small. This prompts to set the number of topics to 25 to balance out the model complexity and computational efficiency.
 3. Users mainly participate in social events based on their interests, but from time to time they attend popular local events regardless of their interests. Local preference plays an important role.
 4. Each latent topic captures event co-occurrence under same event category across different locations. LCA-LDA model helps reduce sparsity in user-item ratings matrix.
 5. User interest, local preference, and content words are blended in a flexible, robust way to produce a very interpretable probabilistic model.
-6. Further research may be needed. Can local preference be split into that of avid travelers and non-travelers, possibly a weighted sum of those two group preferences? Does correlation exist between locations and content words i.e. correlated topic models?
+6. Further research needed. Can local preference be split into that of avid travelers and non-travelers, possibly a weighted sum of those two group preferences? Does correlation exist between locations and content words i.e. correlated topic models?
